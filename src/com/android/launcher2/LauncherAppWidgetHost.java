@@ -1,0 +1,59 @@
+/*
+ * Copyright (C) 2009 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.launcher2;
+
+import android.appwidget.AppWidgetHost;
+import android.appwidget.AppWidgetHostView;
+import android.appwidget.AppWidgetProviderInfo;
+import android.content.Context;
+
+/**
+ * 创建LauncherAppWidgetHostView的AppWidgetHost,
+ * LauncherAppWidgetHostView可接收长按事件以移动或者缩放widget
+ */
+public class LauncherAppWidgetHost extends AppWidgetHost {
+
+	Launcher mLauncher;
+
+	public LauncherAppWidgetHost(Launcher launcher, int hostId) {
+		super(launcher, hostId);
+		mLauncher = launcher;
+	}
+
+	@Override
+	protected AppWidgetHostView onCreateView(Context context, int appWidgetId,
+			AppWidgetProviderInfo appWidget) {
+		return new LauncherAppWidgetHostView(context);
+	}
+
+	@Override
+	public void stopListening() {
+		super.stopListening();
+		clearViews();
+	}
+
+	/*
+	 * widgets发生改变时调用
+	 * Called when the set of available widgets changes (ie. widget containing
+	 * packages are added, updated or removed, or widget components are enabled
+	 * or disabled.)
+	 */
+	protected void onProvidersChanged() {
+		// widget packages更新后，重新绑定
+		mLauncher.bindPackagesUpdated();
+	}
+}
