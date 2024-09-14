@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdk project.properties.compileSdkVersion.toInteger()
+    buildToolsVersion project.properties.buildToolsVersion
+    ndkVersion project.properties.ndkVersion
+
+    defaultConfig {
+        applicationId "com.show.luanch"
+        minSdkVersion 17
+        targetSdkVersion 28
+        minSdkVersion project.properties.minSdkVersion.toInteger()
+        targetSdkVersion project.properties.targetSdkVersion.toInteger()
+        versionCode 1020141
+        versionName '1.0.2014harmattan1'
+        versionNameSuffix 'natasha'
+        buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
+        buildConfigField "int", "BUILD_SDK_VERSION", 30 + ""
+    }
+
+    /* not AIDE */
+    signingConfigs {
+        debug {
+            v1SigningEnabled true
+            v2SigningEnabled true
+            storeFile file(project.properties.storeFile)
+            storePassword project.properties.storePassword
+            keyAlias project.properties.keyAlias
+            keyPassword project.properties.keyPassword
+        }
+        release {
+            v1SigningEnabled true
+            v2SigningEnabled true
+            storeFile file(project.properties.storeFile)
+            storePassword project.properties.storePassword
+            keyAlias project.properties.keyAlias
+            keyPassword project.properties.keyPassword
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packagingOptions {
+        // remove unused ffmpeg libraries
+        // remove all x86/x86-64 libraries
+        //exclude "lib/x86/**"
+        //exclude "lib/x86_64/**"
+        // remove all mobileffmpeg libraries
+        //exclude "lib/*/libmobileffmpeg*.so"
+        // remove all armv7 neon libraries
+        //exclude "lib/armeabi-v7a/*_neon.so"
+
+        // remove arm64 libraries if testing arm32
+        // exclude "lib/arm64-v8a/**"
+
+//        doNotStrip "*/armeabi-v7a/*.so"
+//        doNotStrip "*/arm64-v8a/*.so"
+    }
+}
